@@ -23,6 +23,8 @@
     <script src="js/app.js"></script>
     <script src="js/controllers.js"></script>
     <script src="js/services.js"></script>
+    <script src="js/directives.js"></script>
+
 </head>
 
 <body ng-app="starter" ng-controller="TodoCtrl">
@@ -42,10 +44,14 @@ The nav bar that will be updated as we navigate between views.
                     <i class="icon ion-compose"></i>
                 </button>
             </ion-header-bar>
-            <ion-content scroll="false">
-                <ion-list>
-                    <ion-item ng-repeat="task in activeProject.tasks">
+            <ion-content scroll="false" on-tap="unTappAll()">
+                <ion-list ion-stop-event="tap">
+                    <ion-item class="item-icon-right" ng-repeat="task in activeProject.tasks" on-tap="onTap(task)" on-swipe-left="swipeLeft($index)" ng-class="{active: task.tapped}">
                         {{task.title}}
+                      
+                        <button class="button buttom-small icon ion-close" ng-click="delTask($index)" ng-show="task.tapped">
+                        </button>
+                      
                     </ion-item>
                 </ion-list>
             </ion-content>
@@ -86,7 +92,7 @@ The nav bar that will be updated as we navigate between views.
                 <form ng-submit="createTask(task)">
                     <div class="list">
                         <label class="item item-input">
-                            <input type="text" placeholder="What do you need to do?" ng-model="task.title">
+                            <input autofocus type="text" ng-model="task.title" placeholder="what to do...">
                         </label>
                     </div>
                     <div class="padding">

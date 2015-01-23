@@ -40,8 +40,18 @@ angular.module('starter.controllers', [])
     $scope.activeProject = project;
     Projects.setLastActiveIndex(index);
     $ionicSideMenuDelegate.toggleLeft(false);
+    unTappAllTasks(project);
   };
 
+  $scope.unTappAll = function(){
+    unTappAllTasks($scope.activeProject);
+  };
+
+  function unTappAllTasks(project){
+    angular.forEach(project.tasks, function(task){
+      task.tapped = false;
+    });
+  };
   // Create our modal
   $ionicModal.fromTemplateUrl('new-task.html', function(modal) {
     $scope.taskModal = modal;
@@ -64,6 +74,12 @@ angular.module('starter.controllers', [])
     task.title = "";
   };
 
+  $scope.delTask = function(index) {
+    $scope.activeProject.tasks.splice(index, 1);
+    Projects.save($scope.projects);
+
+  };  
+
   $scope.newTask = function() {
     $scope.taskModal.show();
   };
@@ -74,6 +90,14 @@ angular.module('starter.controllers', [])
 
   $scope.toggleProjects = function() {
     $ionicSideMenuDelegate.toggleLeft();
+  };
+
+  $scope.onTap = function(task){
+    task.tapped = !task.tapped;
+  };
+
+  $scope.swipeLeft = function(index){
+    $scope.delTask(index);
   };
 
 
